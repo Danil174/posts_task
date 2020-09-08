@@ -2,6 +2,7 @@ import React, {useState,  useEffect} from 'react';
 import styled from 'styled-components';
 
 import Post from "../post/Post.jsx";
+import Loading from "../loading/Loading.jsx";
 
 const Input = styled.input`
     border: none;
@@ -32,7 +33,7 @@ const PostsList = ({posts, loading}) => {
     }, [searchStr, posts]);
 
     if (loading) {
-        return (<strong>Данные загружаются...</strong>)
+        return (<Loading>Данные загружаются...</Loading>)
     }
 
     return (
