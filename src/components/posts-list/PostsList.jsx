@@ -28,8 +28,6 @@ const PostsList = ({posts, loading}) => {
                 post.title.toLowerCase().includes(searchStr.toLowerCase())
             )
         );
-        
-        console.log(`filter`);
     }, [searchStr, posts]);
 
     if (loading) {

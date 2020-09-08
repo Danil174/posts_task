@@ -121,7 +121,6 @@ const App = () => {
             setError(err);
             setLoading(false)
           });
-      console.log(`fetch`);
   }, []);
 
   return (
