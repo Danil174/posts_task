@@ -58,21 +58,22 @@ const Item = styled.li`
   }
 `;
 
-const Post = ({post}) => {
-    const {name, username, title, body} = post;
-    return (
+const Post = ({ post }) => {
+  const { author, title, body } = post;
+  const { name, username } = author;
+  return (
     <Item>
-        <div className="block user_block">
-            <span className="ico"></span>
-            <span><strong>Name: </strong>{name}</span>
-            <span><strong>UserName: </strong>{username}</span>
-        </div>
-        <div className="block text_block">
-            <h3>{title}</h3>
-            <p>{body}</p>
-        </div>
+      <div className="block user_block">
+        <span className="ico"></span>
+        <span><strong>Name: </strong>{name}</span>
+        <span><strong>UserName: </strong>{username}</span>
+      </div>
+      <div className="block text_block">
+        <h3>{title}</h3>
+        <p>{body}</p>
+      </div>
     </Item>
-    );
+  );
 }
 
 export default Post;

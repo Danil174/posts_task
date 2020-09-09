@@ -29,7 +29,7 @@ const Ring = styled.div`
 `;
 
 const Loading = () => {
-    return <Ring />;
+  return <Ring />;
 }
 
 export default Loading;

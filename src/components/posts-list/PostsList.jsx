@@ -1,4 +1,4 @@
-import React, {useState,  useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 
 import Post from "../post/Post.jsx";
@@ -21,72 +21,72 @@ const Input = styled.input`
 `;
 
 const useDebounce = (value) => {
-    const [debouncedValue, setDebouncedValue] = useState(value);
- 
-    useEffect(
-      () => {
-        const handler = setTimeout(() => {
-          setDebouncedValue(value);
-        }, DEBOUNCE_TIME);
+  const [debouncedValue, setDebouncedValue] = useState(value);
 
-        return () => {
-          clearTimeout(handler);
-        };
+  useEffect(
+    () => {
+      const handler = setTimeout(() => {
+        setDebouncedValue(value);
+      }, DEBOUNCE_TIME);
+
+      return () => {
+        clearTimeout(handler);
+      };
     }, [value]);
-  
-    return debouncedValue;
+
+  return debouncedValue;
 }
 
-const PostsList = ({posts, loading}) => {
-    const [filteredPosts, setFilteredPosts] = useState([]);
-    const [searchStr, setSearch] = useState("");
+const PostsList = ({ posts, loading }) => {
+  const [filteredPosts, setFilteredPosts] = useState([]);
+  const [searchStr, setSearch] = useState("");
 
-    const debouncedFilterStr = useDebounce(searchStr);
-    
-    useEffect(() => {
-        if (debouncedFilterStr) {
-            setFilteredPosts(
-                posts.filter((post) =>
-                    post.title.toLowerCase().includes(debouncedFilterStr.toLowerCase())
-                )
-            );
-        } else {
-            setFilteredPosts(posts);
-        }
+  const debouncedFilterStr = useDebounce(searchStr);
 
-    }, [debouncedFilterStr, posts]);
-
-    if (loading) {
-        return (<Loading>Данные загружаются...</Loading>)
+  useEffect(() => {
+    if (debouncedFilterStr) {
+      setFilteredPosts(
+        posts.filter((post) =>
+          post.title.toLowerCase().includes(debouncedFilterStr.toLowerCase())
+        )
+      );
+    } else {
+      setFilteredPosts(posts);
     }
 
-    return (
-        <div>
-            <Input
-                type="text"
-                placeholder="filter posts"
-                onChange={(evt) => setSearch(evt.target.value)}
-                value = {searchStr}
-            />
-            <br />
-            {
-                filteredPosts.length === 0 
-                ? 
-                <strong>Соответствий не найдено</strong> 
-                :
-                <ul>
-                {filteredPosts.map((it) => {
-                        return (
-                            <Post
-                                key={it.id}
-                                post={it}
-                            />
-                        )
-                })}
-            </ul>
-            }
-        </div>
-    );
+  }, [debouncedFilterStr, posts]);
+
+  if (loading) {
+    return (<Loading>Данные загружаются...</Loading>)
+  }
+
+  return (
+    <div>
+      <Input
+        type="text"
+        placeholder="filter posts"
+        onChange={(evt) => setSearch(evt.target.value)}
+        value={searchStr}
+      />
+      <br />
+      {
+        filteredPosts.length === 0
+          ?
+          <strong>Соответствий не найдено</strong>
+          :
+          <ul>
+            {filteredPosts.map((it) => {
+              return (
+                <Post
+                  key={it.id}
+                  post={it}
+                />
+              )
+            })}
+          </ul>
+      }
+    </div>
+  );
 }
 
 export default PostsList;
