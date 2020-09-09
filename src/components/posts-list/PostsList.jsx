@@ -58,14 +58,12 @@ const PostsList = ({ posts, loading }) => {
           <strong>Соответствий не найдено</strong>
           :
           <ul>
-            {filteredPosts.map((it) => {
-              return (
-                <Post
-                  key={it.id}
-                  post={it}
-                />
-              )
-            })}
+            {filteredPosts.map((it) =>
+              <Post
+                key={it.id}
+                post={it}
+              />
+            )}
           </ul>
       }
     </div>
