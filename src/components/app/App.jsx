@@ -22,33 +22,15 @@ const GlobalStyle = createGlobalStyle`
     }
   }
 
-  ::-moz-selection {
-    background-color: ${
-  props => props.theme.colorDark
-  };
-    color: white;
-  }
-
-  ::selection {
-    background-color: ${
-  props => props.theme.colorDark
-  };
-    color: white;
-  }
-
   :root {
     font-size: 10px;
   }
 
   body {
-    font-family: ${
-  props => props.theme.fontSans
-  };
+    font-family: ${props => props.theme.fontSans};
     font-size: 1.4rem;
     line-height: 1.5;
-    color: ${
-  props => props.theme.colorDark
-  };
+    color: ${props => props.theme.colorDark};
     margin: 0;
     padding: 0;
   }
@@ -66,7 +48,7 @@ const GlobalStyle = createGlobalStyle`
   }
 
   .container {
-    max-width: 128rem;
+    max-width: 90rem;
     width: 100%;
     margin-left: auto;
     margin-right: auto;

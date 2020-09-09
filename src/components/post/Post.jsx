@@ -6,20 +6,28 @@ const Item = styled.li`
     display: flex;
     flex-direction: row;
     margin-top: 10px;
-    padding: 10px;
+    padding: 15px;
     background-color: ${props => props.theme.mainPostColor};
     border-radius: 13px;
     box-shadow: 1px 1px 5px -2px #9b93e9;
 
     .block {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
     }
 
     .user_block {
-        flex-shrink: 0;
-        margin-right: 15px;
+      width: 150px;
+      flex-shrink: 0;
+      margin-right: 15px;
+    }
+
+    .name {
+      width: 100%;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
   .ico {
@@ -65,8 +73,8 @@ const Post = ({ post }) => {
     <Item>
       <div className="block user_block">
         <span className="ico"></span>
-        <span><strong>Name: </strong>{name}</span>
-        <span><strong>UserName: </strong>{username}</span>
+        <span className="name" title={name}><strong>Name: </strong>{name}</span>
+        <span className="name" title={username}><strong>UserName: </strong>{username}</span>
       </div>
       <div className="block text_block">
         <h3>{title}</h3>
