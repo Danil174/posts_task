@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import PropTypes from "prop-types";
-import { DEBOUNCE_TIME } from '../../const.js';
+import { useDebounce } from "../../util.js";
 
 import Post from "../post/Post.jsx";
 import Loading from "../loading/Loading.jsx";
@@ -19,23 +19,6 @@ const Input = styled.input`
         outline: 2px solid #5583b5;
     }
 `;
-
-const useDebounce = (value) => {
-  const [debouncedValue, setDebouncedValue] = useState(value);
-
-  useEffect(
-    () => {
-      const handler = setTimeout(() => {
-        setDebouncedValue(value);
-      }, DEBOUNCE_TIME);
-
-      return () => {
-        clearTimeout(handler);
-      };
-    }, [value]);
-
-  return debouncedValue;
-}
 
 const PostsList = ({ posts, loading }) => {
   const [filteredPosts, setFilteredPosts] = useState([]);

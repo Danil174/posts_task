@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import styled, { ThemeProvider, createGlobalStyle } from 'styled-components';
 import PostsList from '../posts-list/PostsList.jsx';
 
-import { StatusCodes, POSTS_ENDPOINT, USERS_ENDPOINT } from '../../const.js';
+import { POSTS_ENDPOINT, USERS_ENDPOINT } from '../../const.js';
+import { fetchData } from  '../../util.js';
 
 const theme = {
   mainPostColor: 'rgba(207, 203, 245, 0.25)',
@@ -67,19 +68,6 @@ const NewError = styled.p`
   color: red;
   font-size: 2rem;
 `;
-const checkStatus = (response) => {
-  if (response.status >= StatusCodes.SUCCESS && response.status < StatusCodes.REDIRECTION) {
-    return response;
-  } else {
-    throw new Error(response.status);
-  }
-};
-
-const fetchData = (endpoint) => {
-  return fetch(endpoint)
-    .then(checkStatus)
-    .then((res) => res.json())
-};
 
 const getFormattedPosts = async () => {
   const posts = await fetchData(POSTS_ENDPOINT);
