@@ -4,6 +4,8 @@ import styled from 'styled-components';
 import Post from "../post/Post.jsx";
 import Loading from "../loading/Loading.jsx";
 
+const DEBOUNCE_TIME = 500;
+
 const Input = styled.input`
     border: none;
     box-shadow: none;
@@ -18,17 +20,41 @@ const Input = styled.input`
     }
 `;
 
-const PostsList = ({posts, loading}) => {
-    const [searchStr, setSearch] = useState("");
-    const [filteredPosts, setFilteredPosts] = useState([]);
+const useDebounce = (value) => {
+    const [debouncedValue, setDebouncedValue] = useState(value);
+ 
+    useEffect(
+      () => {
+        const handler = setTimeout(() => {
+          setDebouncedValue(value);
+        }, DEBOUNCE_TIME);
 
+        return () => {
+          clearTimeout(handler);
+        };
+    }, [value]);
+  
+    return debouncedValue;
+}
+
+const PostsList = ({posts, loading}) => {
+    const [filteredPosts, setFilteredPosts] = useState([]);
+    const [searchStr, setSearch] = useState("");
+
+    const debouncedFilterStr = useDebounce(searchStr);
+    
     useEffect(() => {
-        setFilteredPosts(
-            posts.filter((post) =>
-                post.title.toLowerCase().includes(searchStr.toLowerCase())
-            )
-        );
-    }, [searchStr, posts]);
+        if (debouncedFilterStr) {
+            setFilteredPosts(
+                posts.filter((post) =>
+                    post.title.toLowerCase().includes(debouncedFilterStr.toLowerCase())
+                )
+            );
+        } else {
+            setFilteredPosts(posts);
+        }
+
+    }, [debouncedFilterStr, posts]);
 
     if (loading) {
         return (<Loading>Данные загружаются...</Loading>)
