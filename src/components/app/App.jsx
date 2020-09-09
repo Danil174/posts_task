@@ -110,17 +110,17 @@ const fetchData = (endpoint) => {
 const getFormattedPosts = async () => {
   const posts = await fetchData(POSTS_ENDPOINT);
   const userIds = posts.map((post) => post.userId);
-  const uniqueUserIds = userIds.filter((id, index) => {
-    return userIds.indexOf(id) === index;
-  });
+  const uniqueUserIds = [...new Set(userIds)];
   const users = await Promise.all(uniqueUserIds.map((userId) => fetchData(`${USERS_ENDPOINT}/${userId}`)));
   const formattedPosts = posts.map((post) => {
     const user = users.find((user) => user.id === post.userId);
     const { name, username } = user;
     return {
       ...post,
-      name,
-      username
+      author: {
+        name,
+        username
+      }
     };
   });
   return formattedPosts;
