@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import styled, { ThemeProvider, createGlobalStyle } from 'styled-components';
 import PostsList from '../posts-list/PostsList.jsx';
 
+import { StatusCodes, POSTS_ENDPOINT, USERS_ENDPOINT } from '../../const.js';
+
 const theme = {
   mainPostColor: 'rgba(207, 203, 245, 0.25)',
   postBlue: '#5563b5',
@@ -65,16 +67,6 @@ const NewError = styled.p`
   color: red;
   font-size: 2rem;
 `;
-
-const POSTS_ENDPOINT = 'https://jsonplaceholder.typicode.com/posts';
-
-const USERS_ENDPOINT = 'https://jsonplaceholder.typicode.com/users';
-
-const StatusCodes = {
-  SUCCESS: 200,
-  REDIRECTION: 300
-};
-
 const checkStatus = (response) => {
   if (response.status >= StatusCodes.SUCCESS && response.status < StatusCodes.REDIRECTION) {
     return response;

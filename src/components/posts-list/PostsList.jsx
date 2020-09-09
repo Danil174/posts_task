@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import PropTypes from "prop-types";
+import { DEBOUNCE_TIME } from '../../const.js';
 
 import Post from "../post/Post.jsx";
 import Loading from "../loading/Loading.jsx";
-
-const DEBOUNCE_TIME = 500;
 
 const Input = styled.input`
     border: none;
