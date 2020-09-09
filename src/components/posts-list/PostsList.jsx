@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
+import PropTypes from "prop-types";
 
 import Post from "../post/Post.jsx";
 import Loading from "../loading/Loading.jsx";
@@ -88,5 +89,19 @@ const PostsList = ({ posts, loading }) => {
     </div>
   );
 }
+
+PostsList.propTypes = {
+  posts: PropTypes.arrayOf(
+    PropTypes.shape({
+      title: PropTypes.string.isRequired,
+      body: PropTypes.string.isRequired,
+      author: PropTypes.shape({
+        name: PropTypes.string.isRequired,
+        username: PropTypes.isRequired
+      })
+    }).isRequired
+  ),
+  loading: PropTypes.bool.isRequired
+};
 
 export default PostsList;

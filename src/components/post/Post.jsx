@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import PropTypes from "prop-types";
 
 const Item = styled.li`
     position: relative;
@@ -83,5 +84,16 @@ const Post = ({ post }) => {
     </Item>
   );
 }
+
+Post.propTypes = {
+  post: PropTypes.shape({
+    title: PropTypes.string.isRequired,
+    body: PropTypes.string.isRequired,
+    author: PropTypes.shape({
+      name: PropTypes.string.isRequired,
+      username: PropTypes.isRequired
+    })
+  }).isRequired
+};
 
 export default Post;
