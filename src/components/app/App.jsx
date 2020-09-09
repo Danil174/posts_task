@@ -1,13 +1,12 @@
-import React, {useState, useEffect} from 'react';
-import styled, {ThemeProvider, createGlobalStyle} from 'styled-components';
+import React, { useState, useEffect } from 'react';
+import styled, { ThemeProvider, createGlobalStyle } from 'styled-components';
 import PostsList from '../posts-list/PostsList.jsx';
 
 const theme = {
   mainPostColor: 'rgba(207, 203, 245, 0.25)',
   postBlue: '#5563b5',
   postGray: '#bab6b6',
-  fontSans:
-    'system-ui, BlinkMacSystemFont, -apple-system, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif'
+  fontSans: 'system-ui, BlinkMacSystemFont, -apple-system, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif'
 };
 
 const GlobalStyle = createGlobalStyle`
@@ -24,12 +23,16 @@ const GlobalStyle = createGlobalStyle`
   }
 
   ::-moz-selection {
-    background-color: ${props => props.theme.colorDark};
+    background-color: ${
+  props => props.theme.colorDark
+  };
     color: white;
   }
 
   ::selection {
-    background-color: ${props => props.theme.colorDark};
+    background-color: ${
+  props => props.theme.colorDark
+  };
     color: white;
   }
 
@@ -38,10 +41,14 @@ const GlobalStyle = createGlobalStyle`
   }
 
   body {
-    font-family: ${props => props.theme.fontSans};
+    font-family: ${
+  props => props.theme.fontSans
+  };
     font-size: 1.4rem;
     line-height: 1.5;
-    color: ${props => props.theme.colorDark};
+    color: ${
+  props => props.theme.colorDark
+  };
     margin: 0;
     padding: 0;
   }
@@ -77,14 +84,14 @@ const NewError = styled.p`
   font-size: 2rem;
 `;
 
-const getPostUser = (post) => {
-  return fetch(`https://jsonplaceholder.typicode.com/users/${post.userId}`)
-      .then(checkStatus)
-      .then((res) => res.json())
-      .then((data) => {
-          return {...post, name: data.name, username: data.username}
-      });
-}
+const POSTS_ENDPOINT = 'https://jsonplaceholder.typicode.com/posts';
+
+const USERS_ENDPOINT = 'https://jsonplaceholder.typicode.com/users';
+
+const StatusCodes = {
+  SUCCESS: 200,
+  REDIRECTION: 300
+};
 
 const checkStatus = (response) => {
   if (response.status >= StatusCodes.SUCCESS && response.status < StatusCodes.REDIRECTION) {
@@ -94,10 +101,30 @@ const checkStatus = (response) => {
   }
 };
 
-export const StatusCodes = {
-  SUCCESS: 200,
-  REDIRECTION: 300
+const fetchData = (endpoint) => {
+  return fetch(endpoint)
+    .then(checkStatus)
+    .then((res) => res.json())
 };
+
+const getFormattedPosts = async () => {
+  const posts = await fetchData(POSTS_ENDPOINT);
+  const userIds = posts.map((post) => post.userId);
+  const uniqueUserIds = userIds.filter((id, index) => {
+    return userIds.indexOf(id) === index;
+  });
+  const users = await Promise.all(uniqueUserIds.map((userId) => fetchData(`${USERS_ENDPOINT}/${userId}`)));
+  const formattedPosts = posts.map((post) => {
+    const user = users.find((user) => user.id === post.userId);
+    const { name, username } = user;
+    return {
+      ...post,
+      name,
+      username
+    };
+  });
+  return formattedPosts;
+}
 
 const App = () => {
   const [posts, setPosts] = useState([]);
@@ -105,22 +132,11 @@ const App = () => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-      setLoading(true);
-      fetch('https://jsonplaceholder.typicode.com/posts')
-          .then(checkStatus)
-          .then((res) => res.json())
-          .then((posts) => {
-              return posts.map((post) => getPostUser(post));
-          })
-          .then((data) => Promise.all(data))
-          .then((data) => {
-              setPosts(data)
-              setLoading(false)
-          })
-          .catch((err) => {
-            setError(err);
-            setLoading(false)
-          });
+    setLoading(true);
+    getFormattedPosts()
+      .then((posts) => setPosts(posts))
+      .catch((err) => setError(err))
+      .finally(() => setLoading(false));
   }, []);
 
   return (
@@ -129,10 +145,15 @@ const App = () => {
       <div className="container">
         <h1>List of posts</h1>
 
-        {error ? 
+        {
+          error
+          ?
           <NewError>Не удалось загрузить данные</NewError>
           :
-          <PostsList posts={posts} loading={loading} />
+          <PostsList
+            posts={posts}
+            loading={loading}
+          />
         }
       </div>
     </ThemeProvider>
